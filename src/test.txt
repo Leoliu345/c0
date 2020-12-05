@@ -1,10 +1,23 @@
-fn foo(i: int) -> int {
-    return -i;
-}
-fn foo2(i: int) -> void {
-    return;
-}
 fn main() -> void {
-    putint(foo(-123456));
-    getint();
+    let i: int = 1;
+    putint(i);
+    putln();
+    i = i + 1;
+    {
+        i = i + 1;
+        putint(i);
+        putln();
+        {
+            let i: int = 999;
+            putint(i);
+            putln();
+            i = i + 1;
+            {
+                putint(i);
+                putln();
+            }
+        }
+        putint(i);
+        putln();
+    }
 }
