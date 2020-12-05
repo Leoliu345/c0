@@ -13,11 +13,11 @@ import java.util.Scanner;
 
 public class Compiler {
     public static void main(String[] args) throws Exception{
-        Scanner sc=new Scanner(new File(args[1]));
+        Scanner sc=new Scanner(new File(args[0]));
         StringIter it=new StringIter(sc);
         Tokenizer tokenizer=new Tokenizer(it);
         Analyser analyser=new Analyser(tokenizer);
-        analyser.analyse(args[2]);
+        analyser.analyse(args[1]);
 
     }
 }
