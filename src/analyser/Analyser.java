@@ -414,8 +414,8 @@ public class Analyser {
         Token nameToken = expect(TokenType.IDENT);
         expect(TokenType.COLON);
         SymbolType type = analyseType();
-        if (type==SymbolType.VOID)
-            throw new AnalyzeError(ErrorCode.InvalidDeclaration,nameToken.getStartPos());
+        if (type == SymbolType.VOID)
+            throw new AnalyzeError(ErrorCode.InvalidDeclaration, nameToken.getStartPos());
         Symbol symbol = addSymbol(nameToken.getValueString(), true, true, type, storageType, nameToken.getStartPos());
         expect(TokenType.ASSIGN);
 
@@ -440,8 +440,8 @@ public class Analyser {
         Token nameToken = expect(TokenType.IDENT);
         expect(TokenType.COLON);
         SymbolType type = analyseType();
-        if (type==SymbolType.VOID)
-            throw new AnalyzeError(ErrorCode.InvalidDeclaration,nameToken.getStartPos());
+        if (type == SymbolType.VOID)
+            throw new AnalyzeError(ErrorCode.InvalidDeclaration, nameToken.getStartPos());
         Symbol symbol = addSymbol(nameToken.getValueString(), false, false, type, storageType, nameToken.getStartPos());
         if (nextIf(TokenType.ASSIGN) != null) {
             if (isGlobal)
@@ -464,6 +464,7 @@ public class Analyser {
     private boolean[] analyseIfStmt(boolean insideWhile, SymbolType returnType, int loopLoc, ArrayList<Integer> breakList) throws CompileError {
         boolean haveReturn;
         boolean haveBreakOrContinue;
+        boolean haveElse = false;
         ArrayList<Integer> brToEnds = new ArrayList<>();
         expect(TokenType.IF_KW);
         OPGElement element = analyseExprOPG(false);
@@ -497,10 +498,12 @@ public class Analyser {
                     b = analyseBlockStmt(false, insideWhile, returnType, loopLoc, breakList);
                     haveReturn &= b[0];
                     haveBreakOrContinue &= b[1];
+                    haveElse = true;
                     break;
                 }
             }
-        } else {
+        }
+        if (!haveElse) {
             haveReturn = false;
             haveBreakOrContinue = false;
         }
@@ -542,8 +545,8 @@ public class Analyser {
 
     private void analyseReturnStmt(SymbolType returnType) throws CompileError {
         Token expect = expect(TokenType.RETURN_KW);
-        if(returnType!=SymbolType.VOID)
-            instructions.add(new Instruction(Operation.arga,0));
+        if (returnType != SymbolType.VOID)
+            instructions.add(new Instruction(Operation.arga, 0));
         SymbolType type = SymbolType.VOID;
         if (check(TokenType.MINUS) || check(TokenType.IDENT) || check(TokenType.UINT) || check(TokenType.DOUBLE) ||
                 check(TokenType.STRING) || check(TokenType.CHAR) || check(TokenType.L_PAREN)) {
@@ -747,7 +750,7 @@ public class Analyser {
             return new OPGElement(SymbolType.INT, token.getStartPos());
         } else if (check(TokenType.DOUBLE)) {
             token = expect(TokenType.DOUBLE);
-            chosenInstruction.add(new Instruction(Operation.push, Double.doubleToRawLongBits((double)token.getValue())));
+            chosenInstruction.add(new Instruction(Operation.push, Double.doubleToRawLongBits((double) token.getValue())));
             return new OPGElement(SymbolType.DOUBLE, token.getStartPos());
         } else if (check(TokenType.STRING)) {
             token = expect(TokenType.STRING);
