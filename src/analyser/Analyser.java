@@ -305,10 +305,10 @@ public class Analyser {
         }
         functionInstruction.setOffset(funcSymbol.getOffset());
         boolean[] b = analyseBlockStmt(true, false, type, 0, null);
-        if(!funcSymbol.getName().equals("main")&&!b[0]) {
+        if (type != SymbolType.VOID && !b[0]) {
             throw new AnalyzeError(ErrorCode.MissingReturnStatement, nameToken.getStartPos());
         }
-        if (funcSymbol.getName().equals("main")&&!b[0])
+        if (type == SymbolType.VOID && !b[0])
             instructions.add(new Instruction(Operation.ret));
         functionInstruction.setLocalCount(localOffset);
     }
@@ -475,23 +475,27 @@ public class Analyser {
         instructions.add(new Instruction(Operation.br));
         instructions.get(brLoc).setParam1(instructions.size() - brLoc - 1);
         if (check(TokenType.ELSE_KW)) {
-            while (nextIf(TokenType.ELSE_KW) != null && nextIf(TokenType.IF_KW) != null) {
-                element = analyseExprOPG(false);
-                if (element.getType() == SymbolType.VOID)
-                    throw new AnalyzeError(ErrorCode.InvalidType, element.getStartPos());
-                instructions.add(new Instruction(Operation.brtrue, 1));
-                instructions.add(new Instruction(Operation.br));
-                brLoc = instructions.size() - 1;
-                b = analyseBlockStmt(false, insideWhile, returnType, loopLoc, breakList);
-                haveReturn &= b[0];
-                haveBreakOrContinue &= b[1];
-                brToEnds.add(instructions.size());
-                instructions.add(new Instruction(Operation.br));
-                instructions.get(brLoc).setParam1(instructions.size() - brLoc - 1);
+            while (nextIf(TokenType.ELSE_KW) != null) {
+                if (nextIf(TokenType.IF_KW) != null) {
+                    element = analyseExprOPG(false);
+                    if (element.getType() == SymbolType.VOID)
+                        throw new AnalyzeError(ErrorCode.InvalidType, element.getStartPos());
+                    instructions.add(new Instruction(Operation.brtrue, 1));
+                    instructions.add(new Instruction(Operation.br));
+                    brLoc = instructions.size() - 1;
+                    b = analyseBlockStmt(false, insideWhile, returnType, loopLoc, breakList);
+                    haveReturn &= b[0];
+                    haveBreakOrContinue &= b[1];
+                    brToEnds.add(instructions.size());
+                    instructions.add(new Instruction(Operation.br));
+                    instructions.get(brLoc).setParam1(instructions.size() - brLoc - 1);
+                } else {
+                    b = analyseBlockStmt(false, insideWhile, returnType, loopLoc, breakList);
+                    haveReturn &= b[0];
+                    haveBreakOrContinue &= b[1];
+                    break;
+                }
             }
-            b = analyseBlockStmt(false, insideWhile, returnType, loopLoc, breakList);
-            haveReturn &= b[0];
-            haveBreakOrContinue &= b[1];
         } else {
             haveReturn = false;
             haveBreakOrContinue = false;
@@ -741,12 +745,12 @@ public class Analyser {
             return new OPGElement(SymbolType.DOUBLE, token.getStartPos());
         } else if (check(TokenType.STRING)) {
             token = expect(TokenType.STRING);
-            chosenInstruction.add(new Instruction(Operation.push,(long) globalOffset++));
+            chosenInstruction.add(new Instruction(Operation.push, (long) globalOffset++));
             Globals.add(token.getValueString());
             return new OPGElement(SymbolType.INT, token.getStartPos());
         } else if (check(TokenType.CHAR)) {
             token = expect(TokenType.CHAR);
-            chosenInstruction.add(new Instruction(Operation.push, token.getValue()));
+            chosenInstruction.add(new Instruction(Operation.push, (long) (char) token.getValue()));
             return new OPGElement(SymbolType.INT, token.getStartPos());
         } else if (check(TokenType.IDENT)) {
             token = expect(TokenType.IDENT);
@@ -780,7 +784,7 @@ public class Analyser {
             } else if (nextIf(TokenType.L_PAREN) != null) {
                 SymbolType funcReturnType;
                 ArrayList<SymbolType> params;
-                int callnameOffset=-1;
+                int callnameOffset = -1;
                 if (symbol == null) {
                     switch (token.getValueString()) {
                         case "getint":
@@ -819,7 +823,7 @@ public class Analyser {
                             throw new AnalyzeError(ErrorCode.NotDeclared, token.getStartPos());
                     }
                     Globals.add(token.getValueString());
-                    callnameOffset=globalOffset++;
+                    callnameOffset = globalOffset++;
                 } else {
                     funcReturnType = symbol.getSymbolType();
                     params = symbol.getParams();
