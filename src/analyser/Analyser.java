@@ -414,6 +414,8 @@ public class Analyser {
         Token nameToken = expect(TokenType.IDENT);
         expect(TokenType.COLON);
         SymbolType type = analyseType();
+        if (type==SymbolType.VOID)
+            throw new AnalyzeError(ErrorCode.InvalidDeclaration,nameToken.getStartPos());
         Symbol symbol = addSymbol(nameToken.getValueString(), true, true, type, storageType, nameToken.getStartPos());
         expect(TokenType.ASSIGN);
 
@@ -438,6 +440,8 @@ public class Analyser {
         Token nameToken = expect(TokenType.IDENT);
         expect(TokenType.COLON);
         SymbolType type = analyseType();
+        if (type==SymbolType.VOID)
+            throw new AnalyzeError(ErrorCode.InvalidDeclaration,nameToken.getStartPos());
         Symbol symbol = addSymbol(nameToken.getValueString(), false, false, type, storageType, nameToken.getStartPos());
         if (nextIf(TokenType.ASSIGN) != null) {
             if (isGlobal)
@@ -741,7 +745,7 @@ public class Analyser {
             return new OPGElement(SymbolType.INT, token.getStartPos());
         } else if (check(TokenType.DOUBLE)) {
             token = expect(TokenType.DOUBLE);
-            chosenInstruction.add(new Instruction(Operation.push, token.getValue()));
+            chosenInstruction.add(new Instruction(Operation.push, Double.doubleToRawLongBits((double)token.getValue())));
             return new OPGElement(SymbolType.DOUBLE, token.getStartPos());
         } else if (check(TokenType.STRING)) {
             token = expect(TokenType.STRING);

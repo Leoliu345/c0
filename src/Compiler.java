@@ -18,6 +18,5 @@ public class Compiler {
         Tokenizer tokenizer=new Tokenizer(it);
         Analyser analyser=new Analyser(tokenizer);
         analyser.analyse(args[1]);
-
     }
 }
