@@ -187,7 +187,7 @@ public class Analyser {
                         this.symbolTable.push(new Symbol(name, isConstant, isInitialized, symbolType, addr, storageType, localOffset++));
                         break;
                 }
-                System.out.println("add/dup:" + symbolTable.peek());
+                System.out.println("add/dup:" + symbolTable.peek().getName());
             } else {
                 switch (storageType) {
                     case global:
@@ -204,7 +204,7 @@ public class Analyser {
                         this.symbolTable.push(new Symbol(name, isConstant, isInitialized, symbolType, storageType, localOffset++));
                         break;
                 }
-                System.out.println("add:" + symbolTable.peek());
+                System.out.println("add:" + symbolTable.peek().getName());
             }
             this.hashMap.put(name, symbolTable.size() - 1);
         }
@@ -221,7 +221,7 @@ public class Analyser {
             this.hashMap.put(name, symbolTable.size() - 1);
             this.index.push(symbolTable.size());
             Globals.add(name);
-            System.out.println("add:" + symbolTable.peek());
+            System.out.println("add:" + symbolTable.peek().getName());
             return symbol;
         }
     }
@@ -745,7 +745,7 @@ public class Analyser {
             return new OPGElement(SymbolType.DOUBLE, token.getStartPos());
         } else if (check(TokenType.STRING)) {
             token = expect(TokenType.STRING);
-            chosenInstruction.add(new Instruction(Operation.push, globalOffset++));
+            chosenInstruction.add(new Instruction(Operation.push,(long) globalOffset++));
             Globals.add(token.getValueString());
             return new OPGElement(SymbolType.INT, token.getStartPos());
         } else if (check(TokenType.CHAR)) {
