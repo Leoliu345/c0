@@ -301,7 +301,7 @@ public class Analyser {
                 Symbol symbol = this.symbolTable.get(last - i);
                 symbol.setOffset(symbol.getOffset() + 1);
             }
-            instructions.add(new Instruction(Operation.arga, 0));
+            //instructions.add(new Instruction(Operation.arga, 0));
         }
         functionInstruction.setOffset(funcSymbol.getOffset());
         boolean[] b = analyseBlockStmt(true, false, type, 0, null);
@@ -542,6 +542,8 @@ public class Analyser {
 
     private void analyseReturnStmt(SymbolType returnType) throws CompileError {
         Token expect = expect(TokenType.RETURN_KW);
+        if(returnType!=SymbolType.VOID)
+            instructions.add(new Instruction(Operation.arga,0));
         SymbolType type = SymbolType.VOID;
         if (check(TokenType.MINUS) || check(TokenType.IDENT) || check(TokenType.UINT) || check(TokenType.DOUBLE) ||
                 check(TokenType.STRING) || check(TokenType.CHAR) || check(TokenType.L_PAREN)) {
