@@ -1,9 +1,10 @@
 fn foo(i: int) -> int {
     return -i;
 }
-
+fn foo2(i: int) -> void {
+    //return;
+}
 fn main() -> void {
     putint(foo(-123456));
     getint();
-    return;
 }

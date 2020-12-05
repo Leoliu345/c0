@@ -308,7 +308,9 @@ public class Analyser {
             instructions.add(new Instruction(Operation.arga, 0));
         }
         functionInstruction.setOffset(funcSymbol.getOffset());
-        analyseBlockStmt(true, false, type, 0, null);
+        boolean[] b = analyseBlockStmt(true, false, type, 0, null);
+        if(!funcSymbol.getName().equals("main")&&!b[0])
+            throw new AnalyzeError(ErrorCode.MissingReturnStatement, nameToken.getStartPos());
         functionInstruction.setLocalCount(localCount);
     }
 
@@ -363,8 +365,8 @@ public class Analyser {
             instructions.subList(returnSize, instructions.size()).clear();
         if (breakOrContinueSize > 0)
             instructions.subList(breakOrContinueSize, instructions.size()).clear();
-        if (isFunction && !haveReturn)
-            throw new AnalyzeError(ErrorCode.MissingReturnStatement, RBrace.getStartPos());
+//        if (isFunction && !haveReturn)
+//            throw new AnalyzeError(ErrorCode.MissingReturnStatement, RBrace.getStartPos());
         removeBlockSymbols(isFunction);
         return new boolean[]{haveReturn, haveBreakOrContinue};
     }
