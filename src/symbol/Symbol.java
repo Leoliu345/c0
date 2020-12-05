@@ -12,7 +12,7 @@ public class Symbol {
     private StorageType storageType;
     private int offset;
     private int funcOffset;
-    private int chain = 0;
+    private int chain = -1;
 
     public Symbol(String name, boolean isFunction, StorageType storageType, int offset, int funcOffset) {
         this.name = name;

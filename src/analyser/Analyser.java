@@ -243,7 +243,7 @@ public class Analyser {
         int endIndex = index.pop();
         for (int i = symbolTable.size() - 1; i >= endIndex; i--) {
             Symbol tmpSymbol = symbolTable.pop();
-            if (tmpSymbol.getChain() == 0) {
+            if (tmpSymbol.getChain() == -1) {
                 hashMap.remove(tmpSymbol.getName());
                 System.out.println();
             } else {
