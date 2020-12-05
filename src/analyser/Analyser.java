@@ -309,8 +309,11 @@ public class Analyser {
         }
         functionInstruction.setOffset(funcSymbol.getOffset());
         boolean[] b = analyseBlockStmt(true, false, type, 0, null);
-        if(!funcSymbol.getName().equals("main")&&!b[0])
+        if(!funcSymbol.getName().equals("main")&&!b[0]) {
             throw new AnalyzeError(ErrorCode.MissingReturnStatement, nameToken.getStartPos());
+        }
+        if (funcSymbol.getName().equals("main")&&!b[0])
+            instructions.add(new Instruction(Operation.ret));
         functionInstruction.setLocalCount(localCount);
     }
 
