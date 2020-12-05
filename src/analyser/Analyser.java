@@ -830,15 +830,15 @@ public class Analyser {
                 chosenInstruction.add(new Instruction(Operation.stackalloc, stackSize));
                 int paramsSize = params.size();
                 int i = 0;
-//                if (check(TokenType.MINUS) || check(TokenType.IDENT) || check(TokenType.UINT) || check(TokenType.DOUBLE) || check(TokenType.STRING) || check(TokenType.CHAR) || check(TokenType.L_PAREN)) {
-
-                OPGElement element = analyseExprOPG(isGlobal);
-                if (i + 1 > paramsSize || element.getType() != params.get(i++))
-                    throw new AnalyzeError(ErrorCode.InvalidType, element.getStartPos());
-                while (nextIf(TokenType.COMMA) != null) {
-                    element = analyseExprOPG(isGlobal);
+                if (check(TokenType.MINUS) || check(TokenType.IDENT) || check(TokenType.UINT) || check(TokenType.DOUBLE) || check(TokenType.STRING) || check(TokenType.CHAR) || check(TokenType.L_PAREN)) {
+                    OPGElement element = analyseExprOPG(isGlobal);
                     if (i + 1 > paramsSize || element.getType() != params.get(i++))
                         throw new AnalyzeError(ErrorCode.InvalidType, element.getStartPos());
+                    while (nextIf(TokenType.COMMA) != null) {
+                        element = analyseExprOPG(isGlobal);
+                        if (i + 1 > paramsSize || element.getType() != params.get(i++))
+                            throw new AnalyzeError(ErrorCode.InvalidType, element.getStartPos());
+                    }
                 }
                 expect(TokenType.R_PAREN);
                 if (symbol == null)

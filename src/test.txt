@@ -4,5 +4,6 @@ fn foo(i: int) -> int {
 
 fn main() -> void {
     putint(foo(-123456));
+    getint();
     return;
 }
