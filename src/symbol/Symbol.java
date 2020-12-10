@@ -42,28 +42,6 @@ public class Symbol {
         this.chain = chain;
     }
 
-//    public Symbol(String name, boolean isFunction) {
-//        this.name = name;
-//        this.isFunction = isFunction;
-//        this.params = new ArrayList<>();
-//    }
-//
-//    public Symbol(String name, boolean isConstant, boolean isInitialized, SymbolType symbolType) {
-//        this.name = name;
-//        this.isConstant = isConstant;
-//        this.isInitialized = isInitialized;
-//        this.symbolType = symbolType;
-//    }
-//
-//    public Symbol(String name, boolean isConstant, boolean isInitialized, SymbolType symbolType, int chain) {
-//        this.name = name;
-//        this.isConstant = isConstant;
-//        this.isInitialized = isInitialized;
-//        this.symbolType = symbolType;
-//        this.chain = chain;
-//    }
-
-
     public int getFuncOffset() {
         return funcOffset;
     }

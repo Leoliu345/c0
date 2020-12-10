@@ -48,6 +48,7 @@ public class Analyser {
 
     //指令集
     ArrayList<Instruction> instructions;
+
     //start函数指令集
     ArrayList<Instruction> startInstructions;
     //全局变量
