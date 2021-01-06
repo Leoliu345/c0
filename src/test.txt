@@ -1,3 +1,65 @@
-fn main()->void{
-    let i:int = (1<2) as int;
-}
+0a0  loca 0
+010  push 0
+17  store64
+0a0  loca 0
+13  load64
+0110  push 10
+30  cmpi
+39  setlt
+431  brtrue 1
+4154  br 54
+0a1  loca 1
+010  push 0
+17  store64
+0a1  loca 1
+13  load64
+019  push 9
+0a0  loca 0
+13  load64
+21  subi
+30  cmpi
+39  setlt
+431  brtrue 1
+419  br 9
+0132  push 32
+55  printc
+0a1  loca 1
+0a1  loca 1
+13  load64
+011  push 1
+20  addi
+17  store64
+41-19  br -19
+0a1  loca 1
+010  push 0
+17  store64
+0a1  loca 1
+13  load64
+012  push 2
+0a0  loca 0
+13  load64
+22  muli
+011  push 1
+20  addi
+30  cmpi
+39  setlt
+431  brtrue 1
+419  br 9
+0142  push 42
+55  printc
+0a1  loca 1
+0a1  loca 1
+13  load64
+011  push 1
+20  addi
+17  store64
+41-21  br -21
+58  println
+0a0  loca 0
+0a0  loca 0
+13  load64
+011  push 1
+20  addi
+17  store64
+41-66  br -66
+49  ret
